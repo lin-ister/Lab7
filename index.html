@@ -85,14 +85,16 @@
       // the writeup to view the URL pattern for fetch one and fetch all
       function fetchAll() {
         // TODO
-        let info = document.getElementById('recordForm');
-        let id = docuement.getElementById('recordIDcontainer');
-        let output = document.getElementById('output');
-        info.style.display = "none";
-        id.style.display = "none";
+        document.getElementById('recordForm').style.display = "none";
+        document.getElementById('recordIDcontainer').style.display = "none";
+        document.getElementById('output').innerText = "";
+
         fetch(document.getElementById('endpoint').value)
-          .then( response => response.json())
-          .then(data => {output.textContent = JSON.stringify(data)
+          .then((resp) => resp.json())
+          .then(data => {document.getElementById('output').innerText = JSON.stringify(data)
+          })
+          .catch((error) => {
+            document.getElementById('output').innerText = error;
           });
       }
 
@@ -102,8 +104,28 @@
       // the writeup to view the URL pattern for fetch one and fetch all
       function fetchOne() {
         // TODO
+        document.getElementById('recordForm').style.display = "none";
+        document.getElementById('recordIDcontainer').style.display = "none";
+        document.getElementById('output').innerText = "";
         
-
+        fetch(document.getElementById('endpoint').value)
+          .then((resp) => resp.json())
+          .then(data => {
+            let caught = false;
+            let number = Number(window.prompt("Enter record id"))
+            for(let i = 0; i < data.length; i++){
+              if(data[i].id == number){
+                document.getElementById('output').innerText = JSON.stringify(data[i]);
+                caught = true;
+              }
+              if(!caught){
+                document.getElementById('output').innerText = "Network Error: 404";
+              }
+            }
+          })
+          .catch((error) => {
+            document.getElementById('output').innerText = error;
+          });
       }
 
       // This function should use fetch to create one entry in the given endpoint.
@@ -112,7 +134,30 @@
       // the writeup to view the URL pattern for create and update
       function createRecord() {
         // TODO
+        document.getElementById('recordForm').style.display = "none";
+        document.getElementById('recordIDcontainer').style.display = "none";
+        document.getElementById('output').innerText = "";
 
+        if(arguments[0] == 'show'){
+          document.getElementById('recordForm').style.display = 'inline';
+        }
+        if(arguments[0] == 'submit'){
+          let server = {title : document.getElementById('title').value, author : document.getElementById('author').value}
+          fetch(document.getElementById('endpoint').value, {
+            method : 'post',
+            headers : {
+              'Content-Type' : 'application/json'
+            },
+            body : JSON.stringify(server)
+          })
+          .then(resp => resp.json())
+          .then(data => {
+            document.getElementById('output').innerText = JSON.stringify(data);
+          })
+          .catch((error) => {
+            document.getElementById('output').innerText = error;
+          });
+        }
       }
 
       // This function should use fetch to update one existing entry in the given endpoint.
@@ -121,6 +166,33 @@
       // the writeup to view the URL pattern for create and update
       function updateRecord() {
         // TODO
+        document.getElementById('recordForm').style.display = "none";
+        document.getElementById('recordIDcontainer').style.display = "none";
+        document.getElementById('output').innerText = "";
+        
+        if(arguments[0] == 'show'){
+          document.getElementById('recordForm').style.display = 'inline';
+          document.getElementById('recordIDcontainer').style.display = 'inline';
+        }
+
+        let id = Number(document.getElementById('recordID').value);
+        if(arguments[0] == 'submit'){
+          let server = {title : document.getElementById('title').value, author : document.getElementById('author').value, id: document.getElementById('recordID').value}
+          fetch(document.getElementById('endpoint').value + '/' + id, {
+            method : 'put',
+            headers : {
+              'Content-Type' : 'application/json'
+            },
+            body : JSON.stringify(server)
+          })
+          .then(resp => resp.json())
+          .then(data => {
+            document.getElementById('output').innerText = JSON.stringify(server);
+          })
+          .catch((error) => {
+            document.getElementById('output').innerText = error;
+          });
+        }
       }
 
       // This function should use fetch to delete one existing entry in the given endpoint.
@@ -130,6 +202,21 @@
       // delete all, only delete one.
       function deleteRecord() {
         // TODO
+        document.getElementById('recordForm').style.display = "none";
+        document.getElementById('recordIDcontainer').style.display = "none";
+        document.getElementById('output').innerText = "";
+
+        let number = Number(window.prompt("Enter record id"))
+        fetch(document.getElementById('endpoint').value + '/' + number, {
+          method : 'delete'
+        })
+        .then(resp => resp.json())
+        .then(data => {
+            document.getElementById('output').innerText = JSON.stringify(data);
+          })
+          .catch((error) => {
+            document.getElementById('output').innerText = error;
+          });
       }
 
       window.addEventListener('DOMContentLoaded', () => {
