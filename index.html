@@ -85,7 +85,15 @@
       // the writeup to view the URL pattern for fetch one and fetch all
       function fetchAll() {
         // TODO
-        
+        let info = document.getElementById('recordForm');
+        let id = docuement.getElementById('recordIDcontainer');
+        let output = document.getElementById('output');
+        info.style.display = "none";
+        id.style.display = "none";
+        fetch(document.getElementById('endpoint').value)
+          .then( response => response.json())
+          .then(data => {output.textContent = JSON.stringify(data)
+          });
       }
 
       // This function should fetch one entry from the given endpoint.
@@ -94,9 +102,7 @@
       // the writeup to view the URL pattern for fetch one and fetch all
       function fetchOne() {
         // TODO
-        fetch(‘http://localhost:3000/posts')
-        .then(response => response.json())
-        .then(json => console.log(json))
+        
 
       }
 
