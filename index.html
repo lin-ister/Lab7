@@ -94,6 +94,10 @@
       // the writeup to view the URL pattern for fetch one and fetch all
       function fetchOne() {
         // TODO
+        fetch(‘http://localhost:3000/posts')
+        .then(response => response.json())
+        .then(json => console.log(json))
+
       }
 
       // This function should use fetch to create one entry in the given endpoint.
@@ -102,6 +106,7 @@
       // the writeup to view the URL pattern for create and update
       function createRecord() {
         // TODO
+
       }
 
       // This function should use fetch to update one existing entry in the given endpoint.
